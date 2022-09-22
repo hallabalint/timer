@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controller</title>
+    <style>
+        .without_ampm::-webkit-datetime-edit-ampm-field {
+            display: none;
+        }
+        
+        input[type=time]::-webkit-clear-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -o-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            margin: -10px;
+        }
+        
+        .container {
+            margin: 20px;
+            display: flex;
+        }
+        
+        input[type="number"] {
+            width: 2vw;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Timer controller</h1>
+    <h1 id="time"></h1>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <div class="container">
+        <input id="hour" type="number" min="0" max="23" value="0">
+        <p>:</p>
+        <input id="minute" type="number" min="0" max="59" value="5">
+        <p>:</p>
+        <input id="second" type="number" min="0" max="59" value="0">
+        <button id="set" style="margin-left: 10px;">Beállítás</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on("time", (data) => {
+            const result = new Date(data * 1000).toISOString().slice(11, 19);
+            document.getElementById("time").innerText = result;
+        });
+
+        socket.on("status", (data) => {
+            if (data == true) {
+                document.getElementById("time").style.color = "green";
+            } else {
+                document.getElementById("time").style.color = "red";
+            }
+        });
+        //start timer
+        var start = document.getElementById("start");
+        start.addEventListener("click", () => {
+            socket.emit("start");
+        });
+        //stop timer
+        var stop = document.getElementById("stop");
+        stop.addEventListener("click", () => {
+            socket.emit("stop");
+        });
+        //set timer
+        var set = document.getElementById("set");
+        set.addEventListener("click", () => {
+            var hour = parseInt(document.getElementById("hour").value);
+            var minute = parseInt(document.getElementById("minute").value);
+            var second = parseInt(document.getElementById("second").value);
+            let data = hour * 3600 + minute * 60 + second;
+            socket.emit("set", data);
+        });
+    </script>
+</body>
+
+</html>
