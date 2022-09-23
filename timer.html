@@ -12,7 +12,6 @@
     <style>
         body {
             background-color: black;
-            color: white;
             margin: 0;
         }
         
@@ -23,10 +22,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
         
         .timer {
             font-size: 25vw;
+            color: red;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .current_time {
+            font-size: 6vw;
             color: white;
             font-family: 'Roboto', sans-serif;
             display: flex;
@@ -37,16 +45,23 @@
 
 <body>
     <div class="container">
-        <div class="timer" id="time">
+        <div class="timer" id="timer">
 
         </div>
+        <div class="current_time" id="time">
+
+        </div>
+        <img src="logo.png" height="70vh" />
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
         socket.on("time", (data) => {
             const result = new Date(data * 1000).toISOString().slice(11, 19);
-            document.getElementById("time").innerText = result;
+            document.getElementById("timer").innerText = result;
+        });
+        socket.on("current_time", (data) => {
+            document.getElementById("time").innerText = data;
         });
     </script>
 </body>

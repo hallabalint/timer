@@ -10,6 +10,12 @@ var run = false;
 
 function sendData() {
     io.emit("time", time);
+    let date_ob = new Date();
+    let hours = date_ob.getHours();
+    let minutes = date_ob.getMinutes();
+    let seconds = date_ob.getSeconds();
+    let current_time = date_ob.toISOString().slice(11, 19)
+    io.emit("current_time", current_time);
     io.emit("status", run);
 }
 
@@ -21,6 +27,10 @@ function timer() {
 }
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/timer.html');
+});
+
+app.get('/logo.png', (req, res) => {
+    res.sendFile(__dirname + '/logo1.png');
 });
 
 app.get('/control', (req, res) => {
