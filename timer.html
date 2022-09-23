@@ -27,7 +27,7 @@
         
         .timer {
             font-size: 25vw;
-            color: red;
+            color: white;
             font-family: 'Roboto', sans-serif;
             display: flex;
             justify-content: center;
@@ -56,13 +56,33 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
+        let clock;
+        let red = false;
         socket.on("time", (data) => {
+            clock = data;
             const result = new Date(data * 1000).toISOString().slice(11, 19);
             document.getElementById("timer").innerText = result;
         });
         socket.on("current_time", (data) => {
             document.getElementById("time").innerText = data;
         });
+
+        function blink() {
+            if (clock < 60 && clock > 0) {
+                if (red == false) {
+                    document.getElementById("timer").style.color = "red";
+                    red = true;
+                } else {
+                    document.getElementById("timer").style.color = "white";
+                    red = false;
+                }
+            } else if (clock == 0) {
+                document.getElementById("timer").style.color = "red";
+            } else {
+                document.getElementById("timer").style.color = "white";
+            }
+        }
+        setInterval(blink, 500);
     </script>
 </body>
 
