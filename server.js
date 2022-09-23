@@ -29,8 +29,12 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/timer.html');
 });
 
-app.get('/logo.png', (req, res) => {
+app.get('/logo1.png', (req, res) => {
     res.sendFile(__dirname + '/logo1.png');
+});
+
+app.get('/logo2.png', (req, res) => {
+    res.sendFile(__dirname + '/logo2.png');
 });
 
 app.get('/control', (req, res) => {
