@@ -7,9 +7,13 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-var time = 300;
-var run = false;
+//INITIAL VALUES
+var time = 300; //default value of timer
+var run = false; //run timer on server start
+const COMMUNICATION_PORT = 3000; //HTTP port
+const UPDATE_INTERVAL = 1000; //maximum value is 1000!!!
 
+//SEND DATA TO CLIENT
 function sendData() {
     io.emit("time", time);
     let date_ob = new Date();
@@ -20,12 +24,15 @@ function sendData() {
     io.emit("status", run);
 }
 
+//timer
 function timer() {
     if (run && time > 0) {
         time = time - 1;
     }
     sendData();
 }
+
+//HTTP request
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/timer.html');
 });
@@ -42,11 +49,12 @@ app.get('/control', (req, res) => {
     res.sendFile(__dirname + '/controller.html');
 });
 
+//SOCKET.IO
 io.on('connection', (socket) => {
     console.log('a user connected');
     var clientIp = socket.request.connection.remoteAddress;
     console.log('New connection from ' + clientIp);
-    //ha csatalkozik időt küldünk
+    //on connection send data to client
     sendData();
     //disconnect
     socket.on('disconnect', () => {
@@ -70,8 +78,10 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(3000, () => {
-    console.log('listening on *:3000');
+//START SERVER
+server.listen(PORT, () => {
+    console.log('listening on *:' + COMMUNICATION_PORT);
 });
 
-setInterval(timer, 1000);
+//TIMER INTERVAL
+setInterval(timer, UPDATE_INTERVAL < 1000 ? 1000 : UPDATE_INTERVAL);
