@@ -12,9 +12,10 @@ var run = false;
 
 function sendData() {
     io.emit("time", time);
-    let hu_date_string = new Date().toLocaleString("hu-HU", { timeZone: "Europe/Budapest" })
-    let date_ob = new Date(hu_date_string);
-    let current_time = date_ob.toISOString().slice(11, 19)
+    let date_ob = new Date();
+    let current_time = date_ob.toLocaleString('hu-HU', {
+        timeZone: 'Europe/Budapest'
+    }).slice(11, 19);
     io.emit("current_time", current_time);
     io.emit("status", run);
 }
