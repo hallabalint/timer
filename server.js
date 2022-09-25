@@ -44,6 +44,8 @@ app.get('/control', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+    var clientIp = socket.request.connection.remoteAddress;
+    console.log('New connection from ' + clientIp);
     //ha csatalkozik időt küldünk
     sendData();
     //disconnect
