@@ -11,7 +11,7 @@ const io = new Server(server);
 var time = 300; //default value of timer
 var run = false; //run timer on server start
 const COMMUNICATION_PORT = 3000; //HTTP port
-const UPDATE_INTERVAL = 1000; //maximum value is 1000!!!
+const UPDATE_INTERVAL = 1000; //maximum value is 1000(ms)!!!
 
 //SEND DATA TO CLIENT
 function sendData() {
@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
 });
 
 //START SERVER
-server.listen(PORT, () => {
+server.listen(COMMUNICATION_PORT, () => {
     console.log('listening on *:' + COMMUNICATION_PORT);
 });
 
