@@ -17,9 +17,9 @@ const UPDATE_INTERVAL = 1000; //maximum value is 1000(ms)!!!
 function sendData() {
     io.emit("time", time);
     let date_ob = new Date();
-    let current_time = date_ob.toLocaleString('en-US', {
+    let current_time = date_ob.toLocaleString('hu-HU', {
         timeZone: 'Europe/Budapest'
-    }).slice(11, 19);
+    }).split(' ')[3];
     io.emit("current_time", current_time);
     io.emit("status", run);
 }
