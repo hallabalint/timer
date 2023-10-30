@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,80 +10,81 @@
         body {
             background-color: black;
             margin: 0;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
         }
-        
+
         .container {
             top: 50%;
             height: 100vh;
             width: 100vw;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
         }
-        
+
         .timer {
             font-size: 25vw;
             color: white;
             font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
         }
-        
+
         .current_time {
             font-size: 6vw;
+        }
+
+        .text {
+            font-size: 10vw;
             color: white;
             font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="timer" id="timer">
+<div class="container">
+    <div class="text" id="text"></div>
+    <div class="timer" id="timer"></div>
+    <div class="current_time" id="time"></div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+    let clock;
+    let red = false;
 
-        </div>
-        <div class="current_time" id="time">
+    socket.on("time", (data) => {
+        clock = data;
+        const result = new Date(data * 1000).toISOString().slice(11, 19);
+        document.getElementById("timer").innerText = result;
+    });
 
-        </div>
-        <div>
-            <img src="logo1.png" height="70vh" />
-            <img src="logo2.png" height="70vh" />
-        </div>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-        let clock;
-        let red = false;
-        socket.on("time", (data) => {
-            clock = data;
-            const result = new Date(data * 1000).toISOString().slice(11, 19);
-            document.getElementById("timer").innerText = result;
-        });
-        socket.on("current_time", (data) => {
-            document.getElementById("time").innerText = data;
-        });
+    socket.on("current_time", (data) => {
+        document.getElementById("time").innerText = data;
+    });
 
-        function blink() {
-            if (clock < 60 && clock > 0) {
-                if (red == false) {
-                    document.getElementById("timer").style.color = "red";
-                    red = true;
-                } else {
-                    document.getElementById("timer").style.color = "white";
-                    red = false;
-                }
-            } else if (clock == 0) {
+    socket.on("updateText", (data) => {
+        document.getElementById("text").innerText = data;
+    });
+
+    function blink() {
+        if (clock < 60 && clock > 0) {
+            if (red == false) {
                 document.getElementById("timer").style.color = "red";
+                red = true;
             } else {
                 document.getElementById("timer").style.color = "white";
+                red = false;
             }
+        } else if (clock == 0) {
+            document.getElementById("timer").style.color = "red";
+        } else {
+            document.getElementById("timer").style.color = "white";
         }
-        setInterval(blink, 500);
-    </script>
-</body>
+    }
 
+    setInterval(blink, 500);
+</script>
+</body>
 </html>

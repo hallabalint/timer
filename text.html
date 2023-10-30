@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: white;
+            color: black;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .text-input {
+            font-size: 16px;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .update-button, .clear-button {
+            font-size: 16px;
+            background-color: #3498db;
+            border: none;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <input type="text" id="text-input" class="text-input" placeholder="Enter Text">
+    <div class="button-container">
+        <button id="update-text" class="update-button">Update Text</button>
+        <button id="clear-text" class="clear-button">Clear Text</button>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+
+    document.getElementById("update-text").addEventListener("click", function() {
+        var text = document.getElementById("text-input").value;
+        socket.emit("updateText", text);
+    });
+
+    document.getElementById("clear-text").addEventListener("click", function() {
+        document.getElementById("text-input").value = "";
+        socket.emit("updateText", "");
+    });
+</script>
+</body>
+</html>
