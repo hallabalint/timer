@@ -78,6 +78,7 @@
             var second = parseInt(document.getElementById("second").value);
             let data = hour * 3600 + minute * 60 + second;
             socket.emit("set", data);
+            socket.emit("stop");
         });
     </script>
 </body>
