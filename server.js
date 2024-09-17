@@ -12,7 +12,7 @@ const os = require('os');
 var time = 300; // default value of timer
 var run = false; // run timer on server start
 var text = ""; // initial text
-const COMMUNICATION_PORT = 3000; // HTTP port
+const COMMUNICATION_PORT = 90; // HTTP port
 const UPDATE_INTERVAL = 1000; // maximum value is 1000(ms)!!!
 
 // SEND DATA TO CLIENT
@@ -53,6 +53,13 @@ app.get('/mobil', (req, res) => {
 
 app.get('/control', (req, res) => {
     res.sendFile(__dirname + '/controller.html');
+});
+app.get('/logo1.png', (req, res) => {
+    res.sendFile(__dirname + '/logo1.png');
+});
+
+app.get('/logo2.png', (req, res) => {
+    res.sendFile(__dirname + '/logo2.png');
 });
 // SOCKET.IO
 io.on('connection', (socket) => {
